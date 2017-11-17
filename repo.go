@@ -244,7 +244,7 @@ func findAndKillProcess(path string, info os.FileInfo, err error) error {
 		pgid, err := syscall.Getpgid(pid)
 		fmt.Printf("PGID %d\n", pgid)
 		if err == nil {
-		syscall.Kill(-pid, syscall.SIGTERM)
+		syscall.Kill(-pid, syscall.SIGKILL)
 		}
                 return io.EOF
             }
