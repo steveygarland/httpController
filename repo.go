@@ -47,6 +47,7 @@ func RepoAppControl(a App) App {
       b, _ := json.Marshal(a)
       s := string(b)
 
+
      if (state == "started"){
 
 
@@ -57,13 +58,11 @@ func RepoAppControl(a App) App {
       fmt.Println("Current Working Dir:",  currentWorkingDir )
       fmt.Println("State:", state )
 
-     // fullcommand = processName + " " + arg1
 
 
       cmd := exec.Command(processName, arg1)
       cmd.Stdout = os.Stdout 
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
-      //args :=  []string{"-i"}a
       err := cmd.Start()
       if err !=nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -73,33 +72,22 @@ func RepoAppControl(a App) App {
 	runningPid = cmd.Process.Pid
 	fmt.Println("Application Successfully Started!:", cmd )
         fmt.Println("Running:" , cmd.Process.Pid)
-	//isProcessRunning(runningPid)
-
-	//if processErr := cmd.Wait(); processErr != nil {
-	// if exiterr, ok := err.(*exec.ExitError); ok {
-          //  if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
-            //    log.Printf("Exit Status: %d", status.ExitStatus())
-          //  }
-      //  } else {
-       //     log.Fatalf("cmd.Wait: %v", err)
-      //  }
-//}
 	cmd.Wait()
 	exitStatus := cmd.ProcessState.Sys().(syscall.WaitStatus).ExitStatus()
 	fmt.Println("Error:", err)
         fmt.Println("Status:", exitStatus)
 	if exitStatus == -1 {
-	for{
+//	for{
 	if  (state != "stopped" ) {
 	fmt.Println("Process : ", processName, "stopped outside of controller: Restarting")
 	cmd := exec.Command(processName, arg1)
         cmd.Stdout = os.Stdout
         cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
-      //args :=  []string{"-i"}a
+      	//args :=  []string{"-i"}
       	err := cmd.Start()
       	if err !=nil {
                 fmt.Fprintln(os.Stderr, err)
-                fmt.Println("Error: not Started" , processName)
+               fmt.Println("Error: not Started" , processName)
                 os.Exit(1)
         }
         runningPid = cmd.Process.Pid
@@ -107,7 +95,7 @@ func RepoAppControl(a App) App {
         fmt.Println("Running:" , cmd.Process.Pid)
 	cmd.Wait() 
 }
-	}
+//	}
 	}
        // close(done)
 
@@ -127,8 +115,6 @@ func RepoAppControl(a App) App {
 
 }
 }
-
-
 }
       return a
 }
